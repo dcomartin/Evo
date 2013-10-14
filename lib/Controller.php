@@ -22,9 +22,6 @@ class Controller
 			$this->load->library('SeaSurf');
 			$this->seasurf->generate();
 		}
-		
-		// View
-		$this->load->library('View');
 	}
 	
 	public function index()

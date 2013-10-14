@@ -8,19 +8,15 @@ define('EVO_LIB_DIR', 			EVO_HOME.'lib'.DIRECTORY_SEPARATOR);
 define('EVO_PUBLIC_DIR', 		EVO_HOME.'public'.DIRECTORY_SEPARATOR);
 define('EVO_TMP_DIR', 			EVO_HOME.'tmp'.DIRECTORY_SEPARATOR);
 
-define('EVO_PUBLIC_URL',		dirname(substr($_SERVER['SCRIPT_NAME'], 0, strpos($_SERVER['SCRIPT_NAME'], '.php') + 4)).'/public/');
+// URL
+$pathinfoReal = pathinfo(__FILE__);
+define('EVO_PUBLIC_URL',		str_replace($pathinfoReal['basename'], '', $_SERVER['SCRIPT_NAME']).'public/');
 define('EVO_URL', 				substr($_SERVER['SCRIPT_NAME'], 0, strpos($_SERVER['SCRIPT_NAME'], '.php') + 4));
 define('EVO_HOME_URL',			dirname(EVO_URL).'/');
 
 // INI Settings
 ini_set('include_path', 			EVO_LIB_DIR);
-ini_set('zlib.output_compression', 	'Off');
 ini_set('url_rewriter.tags', 		'');
-ini_set('session.gc_maxlifetime', 	1860);
-ini_set('date.timezone', 			'America/Toronto');
-ini_set('display_errors',			1);
-ini_set('default_charset',			'ISO-8859-1');
-ini_set('session.save_path',		EVO_HOME_DIR.'/tmp/session/');
 
 header('P3P: CP="CAO PSA OUR"');
 
@@ -44,7 +40,12 @@ if (isset($_SERVER['PATH_INFO'])) {
 
 	$pathinfo = explode('/', $_SERVER['PATH_INFO']);
 	array_shift($pathinfo);
-		
+	
+	
+	if (empty($pathinfo[0]) || $pathinfo[0] == $pathinfoReal['basename']) {
+		array_shift($pathinfo);
+	}
+	
 	if (!isset($pathinfo[0]) || (isset($pathinfo[0]) && $pathinfo[0] == '')) $pathinfo[0] = 'index';
 	
 	if (is_dir(EVO_APPLICATION_DIR.$pathinfo[0].DIRECTORY_SEPARATOR)) {
@@ -99,12 +100,8 @@ if (isset($_SERVER['PATH_INFO'])) {
 			
 			if (method_exists($controller, EVO_VIEW)) {
 				
-				if (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/x-evo-xhr') {
-					$result = $controller->xhr->dispatch();	
-				} else {
-					$view = EVO_VIEW;
-					$result = $controller->$view();
-				}
+				$view = EVO_VIEW;
+				$result = $controller->$view();
 								
 				if ($result) {
 					echo $result;	
@@ -115,11 +112,11 @@ if (isset($_SERVER['PATH_INFO'])) {
 				exit;
 			}
 		} else {
-			Error::http404('Controller specified ('.$controllerFile.') does not exist.');
+			Error::http404('Controller specified ('.htmlentities(EVO_CONTROLLER).') does not exist.');
 			exit;
 		}
 	} else {
-		Error::http404('Application specified does not exist.');	
+		Error::http404('Application specified ('.htmlentities($pathinfo[0]).') does not exist.');	
 		exit;
 	}
 } else {

@@ -61,11 +61,7 @@ class Loader
 	public function session()
 	{
 		if (!isset($_SESSION)) {
-			
-			if (is_dir(EVO_APPLICATION_DIR.EVO_APPLICATION.DIRECTORY_SEPARATOR.'session')) {
-				session_save_path(EVO_APPLICATION_DIR.EVO_APPLICATION.DIRECTORY_SEPARATOR.'session');
-			}
-			
+					
 			$session = Factory::conf('session');
 			foreach($session as $name => $value) {
 				ini_set('session.'.$name, $value);	
