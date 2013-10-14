@@ -1,0 +1,10 @@
+<Files "*">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files "evo.php">
+Order deny,allow
+Deny from all
+Allow from all
+</Files>

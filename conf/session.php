@@ -1,0 +1,3 @@
+<?PHP
+$conf['autoload'] = TRUE;
+?>
