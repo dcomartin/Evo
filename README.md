@@ -8,9 +8,7 @@ The main purpose of this framework is to provide:
 - Loading Models
 - Loading Views
 
-That's it.  It provides no database/orm, no scaffolding, no authentication, no templating.  
-
-Framework bloat?  Not in this bad boy.
+That's it.  It provides no database/orm, no scaffolding, no authentication, and limited templating.  
 
 ## License
 
@@ -50,7 +48,7 @@ View file name by default should be in ControllerName_ActionName.php (ex: MyCont
 
 The default controller if none specified the URL is "Index".  Same applies for the default action method is "index()"
 
-## Controllers
+### Controllers
 
 Your controller must extend the Controller class.  In your constructor, you must call parent::__construct() to properly load the object.
 
@@ -62,11 +60,15 @@ The view object has two primary methods:
 
 assign($key, $val):  This assigns a key with a value that you want to pass to your view.
 
-Example: $this->view->assign('name', 'John Doe');
+Example:
+
+    $this->view->assign('name', 'John Doe');
 
 In your view file, you can now use the PHP variable $name
 
-render($view = NULL, $return = TRUE):  This loads the PHP view file and returns the contents with the assigned variables (if $return = TRUE).  You can specify a specific view to load by specifying $view parameter.  You can also choose to ouput directly by specifying the $return parameter as false.
+    render($view = NULL, $return = TRUE):  
+
+This loads the PHP view file and returns the contents with the assigned variables (if $return = TRUE).  You can specify a specific view to load by specifying $view parameter.  You can also choose to ouput directly by specifying the $return parameter as false.
 
 ### Loader
 
@@ -83,12 +85,14 @@ $args is the array of arguments to be passed to the constructor
 The loaded library will be assigned to a newly created property of the class name in lowercase or the $name parameter in lowercase.
 
 Example #1:  
-$this->load->library('MyLibrary');
-$this->mylibrary->doSomething();
+
+    $this->load->library('MyLibrary');
+    $this->mylibrary->doSomething();
 
 Example #2:
-$this->load->library('MyLibrary', 'mylib');
-$this->mylib->doSomething();
+
+    $this->load->library('MyLibrary', 'mylib');
+    $this->mylib->doSomething();
 
 #### Model
 model($model, $name = NULL);
@@ -109,8 +113,8 @@ Example Configuration Contents: $conf['myConfigKey'] = 'Some Value';
 
 Example Usage:
 
-$this->load->conf('myConfiguration');
-echo $this->conf['myConfiguration']['myConfigKey'];
+    $this->load->conf('myConfiguration');
+    echo $this->conf['myConfiguration']['myConfigKey'];
 
 #### Session
 
@@ -118,11 +122,11 @@ You can start the PHP session using the session() method.  It will load the conf
 
 Example:
 
-$session['save_path'] = '/path/to/tmp';
+    $session['save_path'] = '/path/to/tmp';
 
 This will result in the session() method calling
 
-ini_set('session.save_path'], '/path/to/tmp');
+    ini_set('session.save_path'], '/path/to/tmp');
 
 ### Error
 
@@ -137,7 +141,7 @@ All method calls load a file of the same name in the evo root /errors/ file depe
 
 Example Usage:
 
-Error::fatal('Ooops!');
+    Error::fatal('Ooops!');
 
 This will first check if "/applications/MyApplication/errors/fatal.php" exists and load it.  If not, it will load "/error/fatal.php"
 
@@ -151,9 +155,9 @@ application($application = 'index', $controller = 'index', $view = 'index')
 
 Example:
 
-echo Uri::view('edit'); // outputs: /evo.php/MyApplication/MyController/edit
-echo Uri::view('AnotherController', 'delete'); // outputs: /evo.php/MyApplication/AnotherController/delete
-echo Uri::view('TestApplication', 'FooController', 'create'); // outputs: /evo.php/TestApplication/FooController/create
+    echo Uri::view('edit'); // outputs: /evo.php/MyApplication/MyController/edit
+    echo Uri::view('AnotherController', 'delete'); // outputs: /evo.php/MyApplication/AnotherController/delete
+    echo Uri::view('TestApplication', 'FooController', 'create'); // outputs: /evo.php/TestApplication/FooController/create
 
 ### Query String
 
@@ -161,29 +165,28 @@ In the format of pretty URL's the query string variables are passed after the vi
 
 Example:
 
-http://domain.ltd/MyApplication/MyController/myAction/var1key/var1value/var2key/var2value
+    http://domain.ltd/MyApplication/MyController/myAction/var1key/var1value/var2key/var2value
 
 Evo will automatically generate the $_GET variable with:
 
-$_GET['var1key'] = $var1value;
-$_GET['var2key'] = $var2value;
+    $_GET['var1key'] = $var1value;
+    $_GET['var2key'] = $var2value;
 
 ### Constants
 
-EVO_HOME = Full file path of the directory where evo.php lives.
-EVO_HOME_DIR = Same as EVO_HOME
-EVO_APPLICATION_DIR = Full file path of the /application/ directory
-EVO_CONF_DIR = Full file path of the /conf/ directory
-EVO_ERROR_DIR = Full path of the /error/ directory
-EVO_LIB_DIR = Full path of the /lib/ directory
-EVO_PUBLIC_DIR = Full path of the /public/ directory
-EVO_TMP_DIR = Full path of the /tmp/ directory
-
-EVO_PUBLIC_URL = URL of the /public directory
-EVO_URL = URL of the evo.php
-EVO_HOME_URL = URL of the directory where evo.php lives.
-EVO_APPLICATION = Name of the application being requested.
-EVO_REQUEST_DIR = Full path of the application directory being requested.
-EVO_CONTROLLER = Name of the controller being requested.
-EVO_VIEW = Name of the view being requested.
-EVO_QUERY_STRING = Query string in the URL.
+* EVO_HOME = Full file path of the directory where evo.php lives
+* EVO_HOME_DIR = Same as EVO_HOME
+* EVO_APPLICATION_DIR = Full file path of the /application/ directory
+* EVO_CONF_DIR = Full file path of the /conf/ directory
+* EVO_ERROR_DIR = Full path of the /error/ directory
+* EVO_LIB_DIR = Full path of the /lib/ directory
+* EVO_PUBLIC_DIR = Full path of the /public/ directory
+* EVO_TMP_DIR = Full path of the /tmp/ directory
+* EVO_PUBLIC_URL = URL of the /public directory
+* EVO_URL = URL of the evo.php
+* EVO_HOME_URL = URL of the directory where evo.php lives.
+* EVO_APPLICATION = Name of the application being requested.
+* EVO_REQUEST_DIR = Full path of the application directory being requested.
+* EVO_CONTROLLER = Name of the controller being requested.
+* EVO_VIEW = Name of the view being requested.
+* EVO_QUERY_STRING = Query string in the URL.
